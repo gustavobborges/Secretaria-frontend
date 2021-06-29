@@ -8,11 +8,9 @@ function Root() {
     return(
         <Router>
             <Switch>
-                <Route path="/" component={PagesAppointment} exact />
-                <Route path="/create" component={PagesAppointmentForm} />
-                <Route path="/edit/:id" component={PagesAppointmentForm} />
-
-
+                <Route path="/" component={PagesAppointment} exact></Route>
+                <Route path="/create" component={PagesAppointmentForm}></Route>
+                <Route path="/edit/:id" component={PagesAppointmentForm}></Route>
             </Switch>
         </Router>
     );

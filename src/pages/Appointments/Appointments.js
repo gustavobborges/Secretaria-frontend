@@ -27,7 +27,7 @@ function PagesAppointment() {
 			<Card>
 				<Table appointments={appointments} />
 				<div className="buttons">
-					<Link to="/create" class="btn btn-success">Novo compromisso</Link>
+					<Link to="/create" className="btn btn-success">Novo compromisso</Link>
 				</div>
 			</Card>
 		</div>

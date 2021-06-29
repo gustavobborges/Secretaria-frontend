@@ -1,8 +1,20 @@
-import React from 'react';
+import React,  { useState, useEffect }  from 'react';
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
+import { BsSearch, BsFillTrashFill } from 'react-icons/bs';
+import './Table.css';
+import axios from 'axios';
+import { Modal, Button } from 'react-bootstrap';
 
 export default function Table({ appointments }) {
+
+    async function DeleteAppointment(id) {
+        await axios.delete(`http://localhost:3004/appointments/${id}`).then((response) => {
+            console.log('excluido com sucesso');
+        })
+        window.location.href = "http://localhost:3000";
+    } 
+    
     const columns = [
         {
             name: "Data",
@@ -31,7 +43,12 @@ export default function Table({ appointments }) {
         },
         {
             name: "Ações",
-            cell:(row)=><Link to={`/edit/${row._id}`} class="btn btn-info">Detalhes</Link>,
+            cell:(row)=>[
+                <div className="col_action" key={row.id}>
+                    <Link to={`/edit/${row.id}`} className="btn btn-primary"><BsSearch/></Link>
+                    <Button onClick={() => DeleteAppointment(row.id)} className="btn btn-danger" ><BsFillTrashFill/></Button>
+                </div>        
+            ],
             ignoreRowClick: true,
             allowOverflow: true,
             button: true,

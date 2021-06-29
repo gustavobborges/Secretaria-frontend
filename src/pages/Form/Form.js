@@ -7,7 +7,7 @@ const PagesAppointmentForm = () => {
 const {id} = useParams();
     return(
         <div>
-            <AppointmentForm id={id ? Number.parseInt(id, 10) : null} />
+            <AppointmentForm id={id ? id : null} />
         </div>
     )
 }

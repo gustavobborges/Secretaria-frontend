@@ -1,17 +1,33 @@
-# Frontend da Secretaria
-    Aqui você pode cadastrar e visualizar seus compromissos. Além de edita-los e deleta-los.
+# Secretary's Frontend
+    On this project, you can view, create, edit and delete your appointments.
 
-### Primeiro, você precisa rodar o backend da aplicação:
-$ git clone https://github.com/gustavobborges/secretary-backend-fake
+### First, you need run application's backend:
+```bash
+# Clone this repositorie
+$ git clone <https://github.com/gustavobborges/secretary-backend-fake>
+
+# Access this directory
 $ cd secretary-backend-fake
-$ yarn
+
+# Run the application
 $ yarn start
 
-### Para executar o frontend:
-$ Clone este repositório
+```
+
+### To run frontend:
+```bash
+# Clone this repositorie
+$ git clone <https://https://github.com/gustavobborges/secretary-frontendWeb>
+
+# Access this directory
 $ cd secretary-frontendWeb
+
+# Install Dependencies
 $ yarn
+
+# Run the application
 $ yarn start
 
-## Bom proveito :)
+```
+
 

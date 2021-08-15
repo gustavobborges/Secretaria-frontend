@@ -1,19 +1,13 @@
 
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 import appointmentsApi from '../../services/appointments';
 
-import { Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-
-
-import './Appointments.css';
-
 import Table from '../../components/Table/Table';
 
-
 function PagesAppointment() {
-
 	const [appointments, setAppointments] = useState([]);
 
 	useEffect(() => {
@@ -23,17 +17,19 @@ function PagesAppointment() {
 	}, [])
 
 	return (
-		<div className="">
-			<Card>
-				<Table appointments={appointments} />
-				<div className="buttons">
-					<Link to="/create" className="btn btn-success">Novo compromisso</Link>
-				</div>
-			</Card>
+		<div>
+			<Table appointments={appointments} />
+			<ButtonComponent>
+				<Link to="/create" className="btn btn-success">Novo compromisso</Link>
+			</ButtonComponent>
 		</div>
-
 	);
 }
+
+const ButtonComponent = styled.div`
+	margin: auto;
+    margin-bottom: 1em;
+`
 
 export default PagesAppointment;
 

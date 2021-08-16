@@ -1,53 +1,29 @@
 import React from 'react';
-import styled from 'styled-components';
+import * as S from './styles';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// import { counterReducer } from '../../store/store';
 
-function Header() {
+export default function Header() {
   const counter = useSelector((state) => state.valueState);
   
   return (
-    <HeaderDiv>
+    <S.HeaderDiv>
       <Link to={'/'}>
-        <Item>
+        <S.Item>
           <p>Agenda</p>
-        </Item>
+        </S.Item>
       </Link>
       <Link to={'/patients'}>
-        <Item>
+        <S.Item>
           <p>Pacientes</p>
-        </Item>
+        </S.Item>
       </Link>
-      <Item>
+      <S.Item>
         <p>Configurações</p>
-      </Item>
-      <Item>
+      </S.Item>
+      <S.Item>
         <p>Redux Test: {counter}</p>
-      </Item>
-    </HeaderDiv>
+      </S.Item>
+    </S.HeaderDiv>
   )
 }
-
-const HeaderDiv = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
-const Item = styled.div`
-  padding: .5rem;
-  cursor: pointer;
-  border-left: 1px solid lightgray;
-
-  &:last-child {
-    border-right: 1px solid lightgray;
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
-  }
-`
-
-export default Header;

@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+// import { counterReducer } from '../../store/store';
 
-export default function Header() {
-  let history = useHistory();
-
-  function HandleClick(){
-    history.push('/');
-  }
+function Header() {
+  const counter = useSelector((state) => state.valueState);
   
   return (
     <HeaderDiv>
@@ -16,11 +14,16 @@ export default function Header() {
           <p>Agenda</p>
         </Item>
       </Link>
-      <Item type="button" onClick={HandleClick}>
-        <p>Pacientes</p>
-      </Item>
+      <Link to={'/patients'}>
+        <Item>
+          <p>Pacientes</p>
+        </Item>
+      </Link>
       <Item>
         <p>Configurações</p>
+      </Item>
+      <Item>
+        <p>Redux Test: {counter}</p>
       </Item>
     </HeaderDiv>
   )
@@ -46,3 +49,5 @@ const Item = styled.div`
     padding: 0;
   }
 `
+
+export default Header;

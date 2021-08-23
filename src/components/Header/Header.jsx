@@ -5,12 +5,17 @@ import { useSelector } from 'react-redux';
 
 export default function Header() {
   const counter = useSelector((state) => state.valueState);
-  
+
   return (
     <S.HeaderDiv>
       <Link to={'/'}>
         <S.Item>
           <p>Agenda</p>
+        </S.Item>
+      </Link>
+      <Link to={'/table'}>
+        <S.Item>
+          <p>Tabela</p>
         </S.Item>
       </Link>
       <Link to={'/patients'}>
@@ -24,6 +29,11 @@ export default function Header() {
       <S.Item>
         <p>Redux Test: {counter}</p>
       </S.Item>
+      <Link to={'/login'}>
+        <S.Item>
+          <p>Tela de Login</p>
+        </S.Item>
+      </Link>
     </S.HeaderDiv>
   )
 }

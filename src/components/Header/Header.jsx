@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 export default function Header() {
   const counter = useSelector((state) => state.valueState);
-
+  const userName = useSelector((state) => state.user.name);
   return (
     <S.HeaderDiv>
       <Link to={'/'}>
@@ -31,7 +31,7 @@ export default function Header() {
       </S.Item>
       <Link to={'/login'}>
         <S.Item>
-          <p>Tela de Login</p>
+          <p>Bem vindo, {userName}</p>
         </S.Item>
       </Link>
     </S.HeaderDiv>

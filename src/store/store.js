@@ -1,6 +1,13 @@
 import { createStore } from 'redux';
 
 const initialState = {
+  user: {
+    session: '',
+    name: '',
+    id: '',
+    email: '',
+
+  },
   valueState: 0
 };
 
@@ -10,6 +17,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         valueState: state.valueState + action.payload.value
+      }
+
+    case 'LOGIN':
+      console.log(`chegou no login. ${JSON.stringify(action.payload)}`)
+      return {
+        ...state,
+        user: action.payload
       }
     default:
       return state;

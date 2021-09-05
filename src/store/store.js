@@ -1,5 +1,8 @@
 import { createStore } from 'redux';
 
+
+//Ver sobre o localStorage
+
 const initialState = {
   user: {
     session: '',

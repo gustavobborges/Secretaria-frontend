@@ -1,7 +1,15 @@
 import axios from 'axios'
 
-const api = axios.create({
-  baseURL:"http://localhost:3004/appointments"
-})
+const baseURL = 'http://localhost:8000';
 
-export default api;
+const getAppointments = async () => {
+  try {
+    const { data } = await axios.get('http://localhost:8000/appointment');
+    return data;
+  } catch (error) {
+    console.log('Erro ao buscar compromissos: '.error)
+  }
+
+}
+
+export default getAppointments;

@@ -1,38 +1,45 @@
-import React from 'react';
-import { Button } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 
-// import Paper from '@material-ui/core/Paper';
-// import { ViewState } from '@devexpress/dx-react-scheduler';
-// import {
-//   Scheduler,
-//   DayView,
-//   Appointments,
-// } from '@devexpress/dx-react-scheduler-material-ui';
+import { useDispatch, useSelector } from 'react-redux';
+import store from '../../store/store';
+
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import getAppointments from '../../services/appointments';
+import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
+
+const localizer = momentLocalizer(moment) // or globalizeLocalizer
 
 const PagesDashboard = () => {
+  const dispatch = useDispatch();
 
-  // const currentDate = '2018-11-01';
-  // const schedulerData = [
-  //   { startDate: '2018-11-01T09:45', endDate: '2018-11-01T11:00', title: 'Meeting' },
-  //   { startDate: '2018-11-01T12:00', endDate: '2018-11-01T13:30', title: 'Go to a gym' },
-  // ];
+  const _appointments = useSelector((state) => state.appointments);
+
+  const [appointments, setAppointments] = useState(_appointments);
+
+  useEffect(() => {
+    async function _getAppointments() {
+      const data = await getAppointments();
+      await setAppointments(data);
+    }
+    _getAppointments();
+  }, []);
+
+  useEffect(() => {
+    console.log(`appointments `+ appointments)
+    dispatch({ type: 'SET_APPOINTMENTS', payload: appointments });
+  }, [appointments]);
 
   return (
-    <Button color="primary">Hello World</Button>
-    // <Paper>
-    //   <Scheduler
-    //     data={schedulerData}
-    //   >
-    //     <ViewState
-    //       currentDate={currentDate}
-    //     />
-    //     <DayView
-    //       startDayHour={9}
-    //       endDayHour={14}
-    //     />
-    //     <Appointments />
-    //   </Scheduler>
-    // </Paper>
+    <div>
+      <Calendar
+        localizer={localizer}
+        events={appointments}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 500 }}
+      />
+    </div>
   );
 }
 

@@ -1,16 +1,14 @@
 import { createStore } from 'redux';
 
 
-//Ver sobre o localStorage
-
 const initialState = {
   user: {
     session: '',
     name: '',
     id: '',
     email: '',
-
   },
+  appointments: [],
   valueState: 0
 };
 
@@ -27,6 +25,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload
+      }
+
+    case 'SET_APPOINTMENTS':
+      console.log(`SET_APPOINTMENTS: ${JSON.stringify(action)}`)
+      return {
+        ...state,
+        appointments: action.payload
       }
     default:
       return state;

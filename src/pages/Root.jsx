@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 // import { AuthContextProvider} from '../contexts/AuthContext';
 
+import Navbar from '../components/Navbar/Navbar';
 import Header from '../components/Header/Header';
 import PagesAppointment from './Appointments/Appointments';
 import PagesAppointmentForm from './Form/Form';
@@ -18,7 +19,7 @@ function Root() {
   return (
     <BrowserRouter>
       {/* <AuthContextProvider> */}
-      {currentUser.session.length === 0
+      {currentUser && currentUser.session.length === 0
         ? <PagesLogin />
         : (<>
             <Header />
@@ -32,6 +33,19 @@ function Root() {
             </Switch>
           </>)
       }
+
+      {/* <>
+        <Header />
+        <Switch>
+          <Route path="/" component={PagesDashboard} exact></Route>
+          <Route path="/create" component={PagesAppointmentForm}></Route>
+          <Route path="/edit/:id" component={PagesAppointmentForm}></Route>
+          <Route path="/patients" component={PagesPatients}></Route>
+          <Route path="/table" component={PagesAppointment}></Route>
+          <Route path="/login" component={PagesLogin}></Route>
+        </Switch>
+      </> */}
+      
 
       {/* </AuthContextProvider> */}
     </BrowserRouter>

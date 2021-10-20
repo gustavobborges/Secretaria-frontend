@@ -9,7 +9,8 @@ const initialState = {
     email: '',
   },
   appointments: [],
-  valueState: 0
+  showForm: false,
+  selectedAppointment: {},
 };
 
 const reducer = (state = initialState, action) => {

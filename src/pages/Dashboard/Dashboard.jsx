@@ -15,7 +15,9 @@ const PagesDashboard = () => {
   const dispatch = useDispatch();
   const _appointments = useSelector((state) => state.appointments);
   const [appointments, setAppointments] = useState(_appointments);
+  const [selectedAppointmnt, setSelectedAppoint] = useState({});
   const [events, setEvents] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     async function _getAppointments() {
@@ -46,22 +48,30 @@ const PagesDashboard = () => {
     setEvents(array);
   }, [appointments]);
 
+  const handleSelectAppointment = (event) => {
+    setSelectedAppoint(event);
+    setShowForm(true);
+  }
 
 
   return (
     <S.Dashboard>
-      <S.DashboardLeft className="col-lg-4 col-sm-12">
+      {showForm && (
+        <S.DashboardTop className="col-lg-4 col-sm-12">
         <h1>ola</h1>
-      </S.DashboardLeft>
-      <S.DashboardRight className="col-lg-8 col-sm-12" >
+      </S.DashboardTop>
+      )}
+      
+      <S.DashboardDown className="col-lg-8 col-sm-12" >
       <Calendar
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
           style={{ height: 500 }}
+          onSelectEvent={event => handleSelectAppointment(event)}
         />
-      </S.DashboardRight>
+      </S.DashboardDown>
     </S.Dashboard>
   );
 }

@@ -24,12 +24,7 @@ export default function Header() {
       <S.HeaderCenter>
         <Link to={'/'}>
           <S.Item>
-            <p>Agenda</p>
-          </S.Item>
-        </Link>
-        <Link to={'/table'}>
-          <S.Item>
-            <p>Tabela</p>
+            <p>Meus compromissos</p>
           </S.Item>
         </Link>
         <Link to={'/patients'}>
@@ -37,12 +32,7 @@ export default function Header() {
             <p>Pacientes</p>
           </S.Item>
         </Link>
-        <S.Item>
-          <p>Configurações</p>
-        </S.Item>
-        <S.Item>
-          <p>Redux Test: {counter}</p>
-        </S.Item>
+
       </S.HeaderCenter>
 
       <S.HeaderRight>

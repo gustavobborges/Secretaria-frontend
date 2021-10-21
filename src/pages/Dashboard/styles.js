@@ -9,7 +9,11 @@ export const Dashboard = styled.div`
 `
 
 export const DashboardTop = styled.div`
-  /* width: 40%; */
+  margin-bottom: 4rem; 
+
+  :first-child {
+    margin-top: 1rem;
+  }
 `
 
 export const DashboardDown = styled.div`

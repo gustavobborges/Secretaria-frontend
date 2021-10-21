@@ -1,37 +1,34 @@
-import React, { useEffect, useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
+import _getAppointments from '../../services/appointments';
 import store from '../../store/store';
 import * as S from './styles';
 
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
-import getAppointments from '../../services/appointments';
-import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
+import FormAppointment from './Form/FormAppointment';
 
 const localizer = momentLocalizer(moment) // or globalizeLocalizer
 
 const PagesDashboard = () => {
   const dispatch = useDispatch();
-  const _appointments = useSelector((state) => state.appointments);
-  const [appointments, setAppointments] = useState(_appointments);
-  const [selectedAppointmnt, setSelectedAppoint] = useState({});
+  const appointments = useSelector((state) => state.appointments);
+  const showForm = useSelector((state) => state.showForm);
+  const selectedAppointmnt = useSelector((state) => state.selectedAppointmnt);
+
+  // const [appointments, setAppointments] = useState(_appointments);
+  // const [selectedAppointmnt, setSelectedAppoint] = useState({});
   const [events, setEvents] = useState([]);
-  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    async function _getAppointments() {
-      const data = await(getAppointments());
-      console.log(data);
-      await setAppointments(data);
-    }
-    _getAppointments();
+    getAppointments();
   }, []);
 
-  useEffect(() => {
-    console.log(`appointments ` + appointments)
-    dispatch({ type: 'SET_APPOINTMENTS', payload: appointments });
-  }, [appointments]);
+  async function getAppointments() {
+    const data = await (_getAppointments());
+    dispatch({ type: 'SET_APPOINTMENTS', payload: data });
+  };
 
   useEffect(() => {
     const array = [];
@@ -41,7 +38,7 @@ const PagesDashboard = () => {
         title: appointment.name,
         start: appointment.initialDate,
         end: appointment.finalDate,
-        allDay: false, 
+        allDay: false,
         resource: appointment.id
       });
     })
@@ -49,21 +46,21 @@ const PagesDashboard = () => {
   }, [appointments]);
 
   const handleSelectAppointment = (event) => {
-    setSelectedAppoint(event);
-    setShowForm(true);
+    const selectedAppointment = appointments.filter((appointment) => appointment.id === event.resource);
+    dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: selectedAppointment });
+    dispatch({ type: 'SET_SHOW_FORM', payload: true });
   }
-
 
   return (
     <S.Dashboard>
       {showForm && (
-        <S.DashboardTop className="col-lg-4 col-sm-12">
-        <h1>ola</h1>
-      </S.DashboardTop>
+        <S.DashboardTop className="col-lg-8 col-sm-12">
+          <FormAppointment />
+        </S.DashboardTop>
       )}
-      
+
       <S.DashboardDown className="col-lg-8 col-sm-12" >
-      <Calendar
+        <Calendar
           localizer={localizer}
           events={events}
           startAccessor="start"

@@ -4,7 +4,9 @@ export const HeaderDiv = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: skyblue;
+  background-color: white;
+  color: black;
+
   a {
     color: inherit;
   }

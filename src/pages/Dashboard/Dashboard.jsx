@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Calendar, momentLocalizer } from 'react-big-calendar'
+import { Button } from 'react-bootstrap';
 import moment from 'moment'
 import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
 import _getAppointments from '../../services/appointments';
@@ -47,7 +48,12 @@ const PagesDashboard = () => {
 
   const handleSelectAppointment = (event) => {
     const selectedAppointment = appointments.filter((appointment) => appointment.id === event.resource);
-    dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: selectedAppointment });
+    dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: selectedAppointment[0] });
+    dispatch({ type: 'SET_SHOW_FORM', payload: true });
+  }
+
+  const handleCreateAppointment = () => {
+    dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {} });
     dispatch({ type: 'SET_SHOW_FORM', payload: true });
   }
 
@@ -65,10 +71,18 @@ const PagesDashboard = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 500 }}
+          style={{ 
+            height: 550,
+            backgroundColor: 'white',
+            padding: '1rem', 
+            borderRadius: '5px', 
+            boxShadow: '0 0 0.4em lightgray'
+          }}
           onSelectEvent={event => handleSelectAppointment(event)}
         />
       </S.DashboardDown>
+
+      <Button className="mt-3" onClick={() => handleCreateAppointment()} style={{ backgroundColor: 'white', border: 0, color: 'black' }}>Novo compromisso</Button>
     </S.Dashboard>
   );
 }

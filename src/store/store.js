@@ -30,7 +30,6 @@ const reducer = (state = initialState, action) => {
       }
 
     case 'SET_APPOINTMENTS':
-      console.log(`SET_APPOINTMENTS: ${JSON.stringify(action)}`)
       return {
         ...state,
         appointments: action.payload
@@ -44,7 +43,7 @@ const reducer = (state = initialState, action) => {
       }
 
     case 'SET_SELECTED_APPOINTMENT':
-      console.log(`SET_SELECT_APPOINTMENT: ${JSON.stringify(action)}`)
+      console.log(`SET_SELECT_APPOINTMENT: ${JSON.stringify(action.payload)}`)
       return {
         ...state,
         selectedAppointment: action.payload

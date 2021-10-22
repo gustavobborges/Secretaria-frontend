@@ -14,11 +14,6 @@ const PagesLogin = () => {
   const history = useHistory();
   const currentUser = useSelector((state) => state.user);
 
-  useEffect(() => {
-    console.log(email);
-    console.log(password);
-  }, [email, password])
-
   if (localStorage.getItem('session')) {
     const userStorage = {
       session: localStorage.getItem('session'),
@@ -54,6 +49,7 @@ const PagesLogin = () => {
       history.push('/');
       
     } catch (error) {
+      alert('O usuário e senha não conferem');
       console.log(`deu ruim.. erro: ${error}`)
     }
   }

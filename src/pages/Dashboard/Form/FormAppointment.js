@@ -1,15 +1,64 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import { Form, Row, Col, Button, CloseButton } from 'react-bootstrap';
 import store from '../../../store/store';
 
+import dateFormater from '../../../utils/dateFormater';
+
 import * as S from './styles';
+
+const initialValue = {
+  name: "",
+  place: "",
+  initialDate: "",
+  finalDate: "",
+  description: ""
+}
 
 const FormAppointment = () => {
   const dispatch = useDispatch();
-  const showForm = useSelector((state) => state.showForm);
-  const selectedAppointment = useSelector((state) => state.selectedAppointment[0]);
-  console.log(selectedAppointment);
+  const selectedAppointment = useSelector((state) => state.selectedAppointment);
+  const id = selectedAppointment.id;
+  const [values, setValues] = useState(id ? selectedAppointment : initialValue);
+  const [date, setDate] = useState(id ?  dateFormater(selectedAppointment.initialDate, 'date') : initialValue)
+  const [initialTime, setInitialTime] = useState(id ?  dateFormater(selectedAppointment.initialDate, 'time') : initialValue);
+  const [finalTime, setfinalTime] = useState(id ?  dateFormater(selectedAppointment.finalDate, 'time') : initialValue);
+
+  const HandleSaveAppointment = (event) => {
+    event.preventDefault();
+    const payload = {
+      
+    }
+    const method = id ? 'put' : 'post';
+    const url = id ? `http://localhost:3004/appointments/${id}` : `http://localhost:3004/appointments/`;
+    axios[method](url, values)
+      .then((response) => {
+        alert('salvo com sucesso!')
+      });
+  }
+
+  const onChange = (event) => {
+    const { name, value } = event.target;
+    switch (name) {
+      case 'date':
+        setDate(value)
+        break;
+
+      case 'initialTime':
+        setInitialTime(value)
+        break;
+
+      case 'finalTime':
+        setfinalTime(value)
+        break;
+    
+      default:
+        setValues({ ...values, [name]: value });
+        break;
+    }
+  }
+
   return (
     <S.CardAppointment>
       <S.FormHeader>
@@ -20,48 +69,32 @@ const FormAppointment = () => {
           <CloseButton onClick={() => dispatch({ type: 'SET_SHOW_FORM', payload: false })} />
         </div>
       </S.FormHeader>
-      <Form>
+      <Form onSubmit={() => HandleSaveAppointment()}>
 
         <Form.Group className="mb-3" controlId="formGridAddress1">
           <Form.Label>Título</Form.Label>
-          {selectedAppointment === {} 
-            ? (<Form.Control placeholder="Título do compromisso" />)
-            : ( <Form.Control placeholder={selectedAppointment.title} />)
-          }
+          <Form.Control type="text" name="name" id="name" value={values.name} onChange={onChange} placeholder="Título do compromisso" required />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formGridAddress1">
           <Form.Label>Local</Form.Label>
-          {selectedAppointment === {} 
-            ? (<Form.Control placeholder="Local do compromisso" />)
-            : ( <Form.Control placeholder={selectedAppointment.place} />)
-          }
-          
+          <Form.Control type="text" name="place" id="place" value={values.place} onChange={onChange} placeholder="Local do compromisso" required />
         </Form.Group>
 
         <Row className="mb-3">
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Label>Data</Form.Label>
-            {selectedAppointment === {} 
-              ? (<Form.Control type="date" placeholder="Título do compromisso" />)
-              : ( <Form.Control type="date" value={"2020-01-01"} />)
-            }
+            <Form.Control type="date" name="date" id="date" value={date} onChange={onChange} required />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Label>Início</Form.Label>
-            {selectedAppointment === {} 
-              ? (<Form.Control type="time" placeholder="Título do compromisso" />)
-              : ( <Form.Control type="time" value={"16:30"} />)
-            }
+            <Form.Control type="time" name="initialTime" id="initialTime" value={initialTime} onChange={onChange} required />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Label>Fim</Form.Label>
-            {selectedAppointment === {} 
-              ? (<Form.Control type="time" placeholder="Título do compromisso" />)
-              : ( <Form.Control type="time" value={"17:30"} />)
-            }
+            <Form.Control type="time" name="finalTime" id="finalTime" value={finalTime} onChange={onChange} required />
           </Form.Group>
         </Row>
 
@@ -75,10 +108,12 @@ const FormAppointment = () => {
 
         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
           <Form.Label>Descrição</Form.Label>
-          <Form.Control as="textarea" rows={3} />
+          {selectedAppointment !== {} || selectedAppointment.hasOwnProperty('name') 
+            ? (<Form.Control as="textarea" rows={3} placeholder="Descrição do compromisso" />)
+            : (<Form.Control as="textarea" rows={3} defaultValue={selectedAppointment.description} />)
+          }
         </Form.Group>
 
-        
         <Button variant="primary" className="justify-content-end" type="submit">
           Salvar
         </Button>

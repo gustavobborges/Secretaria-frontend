@@ -34,18 +34,22 @@ const PagesLogin = () => {
         }
       });  
 
-      console.log(JSON.stringify(user))
       const payloadUser = {
         session: user.data.token,
         name: user.data.user.name,
         id: user.data.user.id,
         email: user.data.user.email
       }
+
+      console.log(`======`)
+      console.log(JSON.stringify(payloadUser))
+      console.log(`======`)
+
       dispatch({ type: 'LOGIN', payload: payloadUser });
       localStorage.setItem('session', payloadUser.session);
       localStorage.setItem('name', payloadUser.name);
       localStorage.setItem('email', payloadUser.email);
-      localStorage.setItem('username', payloadUser.id);
+      localStorage.setItem('id', payloadUser.id);
       history.push('/');
       
     } catch (error) {

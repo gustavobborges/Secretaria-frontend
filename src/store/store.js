@@ -23,7 +23,6 @@ const reducer = (state = initialState, action) => {
       }
 
     case 'LOGIN':
-      console.log(`chegou no login. ${JSON.stringify(action.payload)}`)
       return {
         ...state,
         user: action.payload

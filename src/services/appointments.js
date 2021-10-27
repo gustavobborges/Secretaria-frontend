@@ -11,4 +11,13 @@ const getAppointments = async () => {
   }
 }
 
-export default getAppointments;
+const getAppointmentsTypes = async () => {
+  try {
+    const { data } = await axios.get('http://localhost:8000/appointmentType');
+    return data;
+  } catch (error) {
+    console.log('Erro ao buscar tipos compromissos: '.error)
+  }
+}
+  
+export { getAppointments, getAppointmentsTypes };

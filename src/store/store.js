@@ -9,6 +9,7 @@ const initialState = {
     email: '',
   },
   appointments: [],
+  appointmentsType: [],
   showForm: false,
   selectedAppointment: {},
   selectedPatient: {},
@@ -27,6 +28,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         user: action.payload
       }
+
+      case 'SET_APPOINTMENTS_TYPE':
+        return {
+          ...state,
+          appointmentsType: action.payload
+        }
 
     case 'SET_APPOINTMENTS':
       return {

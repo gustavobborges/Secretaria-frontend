@@ -13,28 +13,36 @@ const initialValue = {
   place: "",
   initialDate: "",
   finalDate: "",
-  description: ""
+  description: "",
+  appointmentType: "",
+  patient: "",
 }
 
 const FormAppointment = () => {
   const dispatch = useDispatch();
   const selectedAppointment = useSelector((state) => state.selectedAppointment);
+  const appointmentsType = useSelector((state) => state.appointmentsType);
   const userId = useSelector((state) => state.user.id);
   const id = selectedAppointment.id;
-  const [values, setValues] = useState(id ? selectedAppointment : initialValue);
-  const [date, setDate] = useState(id ?  dateFormater(selectedAppointment.initialDate, 'date') : initialValue)
-  const [initialTime, setInitialTime] = useState(id ?  dateFormater(selectedAppointment.initialDate, 'time') : initialValue);
-  const [finalTime, setfinalTime] = useState(id ?  dateFormater(selectedAppointment.finalDate, 'time') : initialValue);
+  const [values, setValues] = useState(id ? {
+    ...selectedAppointment,
+    appointmentType: selectedAppointment.appointmentType.id,
+    patient: selectedAppointment?.patient?.id,
+  } : initialValue);
+  const [date, setDate] = useState(id ? dateFormater(selectedAppointment.initialDate, 'date') : initialValue);
+  const [initialTime, setInitialTime] = useState(id ? dateFormater(selectedAppointment.initialDate, 'time') : initialValue);
+  const [finalTime, setfinalTime] = useState(id ? dateFormater(selectedAppointment.finalDate, 'time') : initialValue);
 
   const HandleSaveAppointment = async (event) => {
-    // event.preventDefault();
-    console.log(`la vai!`)
-
+    console.log('values', values);
     const payload = {
       ...values,
-      userId
+      user: userId, 
+      initialDate: date+' '+initialTime,
+      finalDate: date+' '+finalTime
     }
-    console.log(`la vai!`)
+
+    console.log(payload)
     const method = id ? 'put' : 'post';
     const url = id ? `http://localhost:8000/appointment/${id}` : `http://localhost:8000/appointment`;
     await axios[method](url, payload)
@@ -57,12 +65,18 @@ const FormAppointment = () => {
       case 'finalTime':
         setfinalTime(value)
         break;
-    
+
       default:
         setValues({ ...values, [name]: value });
         break;
     }
   }
+
+  useEffect(() => {
+    console.log('values', values);
+  }, [values])
+
+  //O BACKEND NAO TA MANDANDO O APPOINTMENTTYPES /APPOINTMENTS REQUISICOES!
 
   return (
     <S.CardAppointment>
@@ -75,6 +89,14 @@ const FormAppointment = () => {
         </div>
       </S.FormHeader>
       <Form>
+
+        <Row className="mb-3">
+          <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
+            {appointmentsType.map((type) => (
+              <Form.Check type="checkbox" label={type.name} name="appointmentType" value={type.id} key={type.id} onChange={onChange} style={{ marginRight: '1rem' }} /*checked={values.appointmentType === type.id}*/ />
+            ))}
+          </Form.Group>
+        </Row>
 
         <Form.Group className="mb-3">
           <Form.Label>Título</Form.Label>
@@ -111,19 +133,16 @@ const FormAppointment = () => {
           </Form.Select>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+        <Form.Group className="mb-3">
           <Form.Label>Descrição</Form.Label>
-          {selectedAppointment !== {} || selectedAppointment.hasOwnProperty('name') 
-            ? (<Form.Control as="textarea" rows={3} placeholder="Descrição do compromisso" />)
-            : (<Form.Control as="textarea" rows={3} defaultValue={selectedAppointment.description} />)
-          }
+          <Form.Control type="textarea" name="description" id="description" rows={3} value={values.description} placeholder="Descrição do compromisso" onChange={onChange} required />
         </Form.Group>
 
         <Button variant="primary" className="justify-content-end" onClick={() => HandleSaveAppointment()}>
           Salvar
         </Button>
 
-        
+
       </Form>
     </S.CardAppointment>
   );

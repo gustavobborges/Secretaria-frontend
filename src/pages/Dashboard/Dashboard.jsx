@@ -4,32 +4,33 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import { Button } from 'react-bootstrap';
 import moment from 'moment'
 import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
-import _getAppointments from '../../services/appointments';
-import store from '../../store/store';
+import { getAppointments, getAppointmentsTypes } from '../../services/appointments';
 import * as S from './styles';
-
 import FormAppointment from './Form/FormAppointment';
-
-const localizer = momentLocalizer(moment) // or globalizeLocalizer
+const localizer = momentLocalizer(moment)
 
 const PagesDashboard = () => {
   const dispatch = useDispatch();
   const appointments = useSelector((state) => state.appointments);
+  const appointmentsType = useSelector((state) => state.appointmentsType);
   const showForm = useSelector((state) => state.showForm);
-  const selectedAppointmnt = useSelector((state) => state.selectedAppointmnt);
-
-  // const [appointments, setAppointments] = useState(_appointments);
-  // const [selectedAppointmnt, setSelectedAppoint] = useState({});
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    getAppointments();
+    _getAppointments();
+    if (appointmentsType !== [])
+      _getAppointmentsType();
   }, []);
 
-  async function getAppointments() {
-    const data = await (_getAppointments());
+  async function _getAppointments() {
+    const data = await (getAppointments());
     dispatch({ type: 'SET_APPOINTMENTS', payload: data });
   };
+
+  async function _getAppointmentsType() {
+    const data = await (getAppointmentsTypes());
+    dispatch({ type: 'SET_APPOINTMENTS_TYPE', payload: data });
+  }
 
   useEffect(() => {
     const array = [];

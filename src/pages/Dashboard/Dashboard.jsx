@@ -13,6 +13,7 @@ const PagesDashboard = () => {
   const dispatch = useDispatch();
   const appointments = useSelector((state) => state.appointments);
   const appointmentsType = useSelector((state) => state.appointmentsType);
+  const userId = useSelector((state) => state.user.id);
   const showForm = useSelector((state) => state.showForm);
   const [events, setEvents] = useState([]);
 
@@ -23,19 +24,19 @@ const PagesDashboard = () => {
   }, []);
 
   async function _getAppointments() {
-    const data = await (getAppointments());
+    const data = await getAppointments(userId);
     dispatch({ type: 'SET_APPOINTMENTS', payload: data });
   };
 
   async function _getAppointmentsType() {
-    const data = await (getAppointmentsTypes());
+    const data = await getAppointmentsTypes();
     dispatch({ type: 'SET_APPOINTMENTS_TYPE', payload: data });
   }
 
   useEffect(() => {
+    console.log(appointments)
     const array = [];
     Object.values(appointments).map((appointment) => {
-      console.log(appointment)
       array.push({
         title: appointment.name,
         start: appointment.initialDate,
@@ -49,6 +50,7 @@ const PagesDashboard = () => {
 
   const handleSelectAppointment = (event) => {
     const selectedAppointment = appointments.filter((appointment) => appointment.id === event.resource);
+    console.log('selectedAppointment', selectedAppointment)
     dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: selectedAppointment[0] });
     dispatch({ type: 'SET_SHOW_FORM', payload: true });
   }

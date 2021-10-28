@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Form, Row, Col, Button, CloseButton } from 'react-bootstrap';
-import store from '../../../store/store';
-
+import getPatients from '../../../services/patients';
+import { getAppointments } from '../../../services/appointments';
 import dateFormater from '../../../utils/dateFormater';
-
 import * as S from './styles';
 
 const initialValue = {
@@ -21,20 +20,40 @@ const initialValue = {
 const FormAppointment = () => {
   const dispatch = useDispatch();
   const selectedAppointment = useSelector((state) => state.selectedAppointment);
+  const appointments = useSelector((state) => state.appointments);
   const appointmentsType = useSelector((state) => state.appointmentsType);
+  const patients = useSelector((state) => state.patients);
   const userId = useSelector((state) => state.user.id);
   const id = selectedAppointment.id;
+
+  const [date, setDate] = useState(id ? dateFormater(selectedAppointment.initialDate, 'date') : initialValue);
+  const [initialTime, setInitialTime] = useState(id ? dateFormater(selectedAppointment.initialDate, 'time') : initialValue);
+  const [finalTime, setfinalTime] = useState(id ? dateFormater(selectedAppointment.finalDate, 'time') : initialValue);
   const [values, setValues] = useState(id ? {
     ...selectedAppointment,
     appointmentType: selectedAppointment.appointmentType.id,
     patient: selectedAppointment?.patient?.id,
   } : initialValue);
-  const [date, setDate] = useState(id ? dateFormater(selectedAppointment.initialDate, 'date') : initialValue);
-  const [initialTime, setInitialTime] = useState(id ? dateFormater(selectedAppointment.initialDate, 'time') : initialValue);
-  const [finalTime, setfinalTime] = useState(id ? dateFormater(selectedAppointment.finalDate, 'time') : initialValue);
+
+  console.log('selectedAppointment', selectedAppointment)
+  useEffect(() => {
+    if (patients.length === 0) {
+      _getPatients()
+    }
+    console.log(appointments)
+
+  }, [patients]);
+
+  useEffect(() => {
+    console.log('appointmentsType', appointmentsType);
+  }, [appointmentsType]);
+
+  const _getPatients = async () => {
+    const data = await getPatients(userId);
+    dispatch({ type: 'SET_PATIENTS', payload: data });
+  };
 
   const HandleSaveAppointment = async (event) => {
-    console.log('values', values);
     const payload = {
       ...values,
       user: userId, 
@@ -42,17 +61,28 @@ const FormAppointment = () => {
       finalDate: date+' '+finalTime
     }
 
-    console.log(payload)
+    // console.log(payload)
     const method = id ? 'put' : 'post';
     const url = id ? `http://localhost:8000/appointment/${id}` : `http://localhost:8000/appointment`;
-    await axios[method](url, payload)
+    const data = await axios[method](url, payload)
       .then((response) => {
-        alert('salvo com sucesso!')
+        dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {} });
+        dispatch({ type: 'SET_SHOW_FORM', payload: false });
+        return response
       });
+      // const responseAppointment = data.config.data;
+      // const newAppoinrtments = appointments
+      // const newAppointment = {
+      //   ...payload,
+      //   initialDate: data.initialDate,
+      //   finalDate: data.finalDate,
+    const newAppointments = await getAppointments(userId);
+    dispatch({ type: 'SET_APPOINTMENTS', payload: newAppointments });
   }
 
   const onChange = (event) => {
     const { name, value } = event.target;
+    console.log(name, value);
     switch (name) {
       case 'date':
         setDate(value)
@@ -72,12 +102,6 @@ const FormAppointment = () => {
     }
   }
 
-  useEffect(() => {
-    console.log('values', values);
-  }, [values])
-
-  //O BACKEND NAO TA MANDANDO O APPOINTMENTTYPES /APPOINTMENTS REQUISICOES!
-
   return (
     <S.CardAppointment>
       <S.FormHeader>
@@ -93,7 +117,7 @@ const FormAppointment = () => {
         <Row className="mb-3">
           <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
             {appointmentsType.map((type) => (
-              <Form.Check type="checkbox" label={type.name} name="appointmentType" value={type.id} key={type.id} onChange={onChange} style={{ marginRight: '1rem' }} /*checked={values.appointmentType === type.id}*/ />
+              <Form.Check type="checkbox" label={type.name} name="appointmentType" value={type.id} key={type.id} onChange={onChange} style={{ marginRight: '1rem' }} checked={values.appointmentType === type.id} />
             ))}
           </Form.Group>
         </Row>
@@ -127,9 +151,11 @@ const FormAppointment = () => {
 
         <Form.Group className="mb-3" as={Col}>
           <Form.Label>Paciente</Form.Label>
-          <Form.Select>
-            <option>Paciente 1</option>
-            <option>Paciente 2</option>
+          <Form.Select name="patient" value onChange={onChange}>
+          <option value="" selected={values.patient === ""}>Selecione</option>
+            {patients.map((patient) => (
+              <option selected={values.patient === patient.id}  value={patient.id} key={patient.id}>{patient.name} </option>
+            ))}
           </Form.Select>
         </Form.Group>
 

@@ -21,18 +21,29 @@ export const HeaderRight = styled.div`
 `
 
 export const Item = styled.div`
-  padding: .5rem;
   cursor: pointer;
-  border-right: 1px solid lightgray;
   display: flex;
   gap: 1rem;
+  font-size: 14px;
+
+  
+
+  .isSelected { 
+    width: 100%;
+    background-color: skyblue !important;
+
+    p {
+    font-weight: 500;
+    }
+  }
 
   &:last-child {
     border-right: none;
   }
 
   p {
+    font-weight: 400;
     margin: 0;
-    padding: 0;
+    padding: .5rem;
   }
 `

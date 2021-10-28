@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Content = styled.div`
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
   background-color: skyblue;
   border: 1px solid black;
   width: 100%;

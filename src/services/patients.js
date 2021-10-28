@@ -2,13 +2,13 @@ import axios from 'axios'
 
 const baseURL = 'http://localhost:8000';
 
-const getAppointments = async () => {
+const getPatients = async (id) => {
   try {
-    const { data } = await axios.get('http://localhost:8000/appointment');
+    const { data } = await axios.get(`http://localhost:8000/patient/${id}`);
     return data;
   } catch (error) {
-    console.log('Erro ao buscar compromissos: '.error)
+    console.log('Erro ao buscar pacientes: '.error)
   }
 }
 
-export default getAppointments;
+export default getPatients;

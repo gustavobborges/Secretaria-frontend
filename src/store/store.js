@@ -10,9 +10,11 @@ const initialState = {
   },
   appointments: [],
   appointmentsType: [],
+  patients: [],
   showForm: false,
   selectedAppointment: {},
   selectedPatient: {},
+  selectedMenu: 'appointments',
 };
 
 const reducer = (state = initialState, action) => {
@@ -29,30 +31,42 @@ const reducer = (state = initialState, action) => {
         user: action.payload
       }
 
-      case 'SET_APPOINTMENTS_TYPE':
-        return {
-          ...state,
-          appointmentsType: action.payload
-        }
+    case 'SET_APPOINTMENTS_TYPE':
+      return {
+        ...state,
+        appointmentsType: action.payload
+      }
 
     case 'SET_APPOINTMENTS':
+      console.log(action.payload)
       return {
         ...state,
         appointments: action.payload
       }
 
+    case 'SET_PATIENTS':
+      return {
+        ...state,
+        patients: action.payload
+      }
+
     case 'SET_SHOW_FORM':
-      console.log(`SET_SHOW_FORM: ${JSON.stringify(action)}`)
       return {
         ...state,
         showForm: action.payload
       }
 
     case 'SET_SELECTED_APPOINTMENT':
-      console.log(`SET_SELECT_APPOINTMENT: ${JSON.stringify(action.payload)}`)
+      console.log(action.payload)
       return {
         ...state,
         selectedAppointment: action.payload
+      }
+      
+    case 'SET_SELECTED_MENU':
+      return {
+        ...state,
+        selectedMenu: action.payload
       }
     default:
       return state;

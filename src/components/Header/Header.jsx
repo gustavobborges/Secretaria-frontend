@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Header() {
-  const counter = useSelector((state) => state.valueState);
   const userName = useSelector((state) => state.user.name);
+  const selectedMenu = useSelector((state) => state.selectedMenu);
   const dispatch = useDispatch();
 
   const HandleLogout = () => {
@@ -19,29 +19,36 @@ export default function Header() {
     dispatch({ type: 'LOGIN', payload: payload });
   }
 
+  const HandleChangePage = (page) => {
+    console.log(page)
+    dispatch({ type: 'SET_SELECTED_MENU', payload: page });
+  }
+
   return (
     <S.HeaderDiv>
       <S.HeaderCenter>
         <Link to={'/'}>
-          <S.Item>
-            <p>Meus compromissos</p>
+          <S.Item  onClick={() => HandleChangePage('appointments')}>
+            <div className={selectedMenu === 'appointments' ? 'isSelected' : ''}>
+              <p>Meus compromissos</p>
+            </div>
           </S.Item>
         </Link>
         <Link to={'/patients'}>
-          <S.Item>
-            <p>Pacientes</p>
+          <S.Item onClick={() => HandleChangePage('patients')}>
+            <div className={selectedMenu === 'patients' ? 'isSelected' : ''}>
+              <p>Pacientes</p>
+            </div>
           </S.Item>
         </Link>
 
       </S.HeaderCenter>
 
       <S.HeaderRight>
-        <Link to={'/login'}>
-          <S.Item>
-            <p>Bem vindo, {userName}</p>
-            <p onClick={HandleLogout}><b>Sair</b></p>
-          </S.Item>
-        </Link>
+        <S.Item>
+          <p>Bem vindo, {userName}</p>
+          <p onClick={HandleLogout}><b>Sair</b></p>
+        </S.Item>
       </S.HeaderRight>
     </S.HeaderDiv>
   )

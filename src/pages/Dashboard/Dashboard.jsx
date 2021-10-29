@@ -34,18 +34,18 @@ const PagesDashboard = () => {
   }
 
   useEffect(() => {
-    console.log(appointments)
     const array = [];
     Object.values(appointments).map((appointment) => {
       array.push({
         title: appointment.name,
-        start: appointment.initialDate,
-        end: appointment.finalDate,
+        start: new Date(appointment.initialDate),
+        end: new Date(appointment.finalDate),
         allDay: false,
         resource: appointment.id
       });
     })
     setEvents(array);
+    console.log(array)
   }, [appointments]);
 
   const handleSelectAppointment = (event) => {

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { Form, Row, Col, Button, CloseButton } from 'react-bootstrap';
 import getPatients from '../../../services/patients';
-import { getAppointments } from '../../../services/appointments';
+import { getAppointments, createOrUpdateAppointment, deleteAppointment } from '../../../services/appointments';
 import dateFormater from '../../../utils/dateFormater';
 import * as S from './styles';
 
@@ -25,6 +24,7 @@ const FormAppointment = () => {
   const patients = useSelector((state) => state.patients);
   const userId = useSelector((state) => state.user.id);
   const id = selectedAppointment.id;
+  const personalType = appointmentsType.find((type) => type.name === 'Pessoal');
 
   const [date, setDate] = useState(id ? dateFormater(selectedAppointment.initialDate, 'date') : initialValue);
   const [initialTime, setInitialTime] = useState(id ? dateFormater(selectedAppointment.initialDate, 'time') : initialValue);
@@ -35,18 +35,11 @@ const FormAppointment = () => {
     patient: selectedAppointment?.patient?.id,
   } : initialValue);
 
-  console.log('selectedAppointment', selectedAppointment)
   useEffect(() => {
     if (patients.length === 0) {
       _getPatients()
     }
-    console.log(appointments)
-
   }, [patients]);
-
-  useEffect(() => {
-    console.log('appointmentsType', appointmentsType);
-  }, [appointmentsType]);
 
   const _getPatients = async () => {
     const data = await getPatients(userId);
@@ -54,48 +47,46 @@ const FormAppointment = () => {
   };
 
   const HandleSaveAppointment = async (event) => {
+    const patientSubmit = values.appointmentType === personalType.id ? null : values.patient;
     const payload = {
       ...values,
-      user: userId, 
-      initialDate: date+' '+initialTime,
-      finalDate: date+' '+finalTime
+      patient: patientSubmit,
+      user: userId,
+      initialDate: date + ' ' + initialTime,
+      finalDate: date + ' ' + finalTime
     }
-
-    // console.log(payload)
     const method = id ? 'put' : 'post';
-    const url = id ? `http://localhost:8000/appointment/${id}` : `http://localhost:8000/appointment`;
-    const data = await axios[method](url, payload)
+    await createOrUpdateAppointment(method, payload, id)
       .then((response) => {
         dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {} });
         dispatch({ type: 'SET_SHOW_FORM', payload: false });
         return response
       });
-      // const responseAppointment = data.config.data;
-      // const newAppoinrtments = appointments
-      // const newAppointment = {
-      //   ...payload,
-      //   initialDate: data.initialDate,
-      //   finalDate: data.finalDate,
+    const newAppointments = await getAppointments(userId);
+    dispatch({ type: 'SET_APPOINTMENTS', payload: newAppointments });
+  }
+
+  const HandleDeleteAppointment = async (id) => {
+    await deleteAppointment(id).then((response) => {
+      dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {} });
+      dispatch({ type: 'SET_SHOW_FORM', payload: false });
+    });
     const newAppointments = await getAppointments(userId);
     dispatch({ type: 'SET_APPOINTMENTS', payload: newAppointments });
   }
 
   const onChange = (event) => {
     const { name, value } = event.target;
-    console.log(name, value);
     switch (name) {
       case 'date':
         setDate(value)
         break;
-
       case 'initialTime':
         setInitialTime(value)
         break;
-
       case 'finalTime':
         setfinalTime(value)
         break;
-
       default:
         setValues({ ...values, [name]: value });
         break;
@@ -113,7 +104,6 @@ const FormAppointment = () => {
         </div>
       </S.FormHeader>
       <Form>
-
         <Row className="mb-3">
           <Form.Group className="mb-3 d-flex" controlId="formBasicCheckbox">
             {appointmentsType.map((type) => (
@@ -121,7 +111,6 @@ const FormAppointment = () => {
             ))}
           </Form.Group>
         </Row>
-
         <Form.Group className="mb-3">
           <Form.Label>Título</Form.Label>
           <Form.Control type="text" name="name" id="name" value={values.name} onChange={onChange} placeholder="Título do compromisso" required />
@@ -148,26 +137,31 @@ const FormAppointment = () => {
             <Form.Control type="time" name="finalTime" id="finalTime" value={finalTime} onChange={onChange} required />
           </Form.Group>
         </Row>
-
-        <Form.Group className="mb-3" as={Col}>
-          <Form.Label>Paciente</Form.Label>
-          <Form.Select name="patient" value onChange={onChange}>
-          <option value="" selected={values.patient === ""}>Selecione</option>
-            {patients.map((patient) => (
-              <option selected={values.patient === patient.id}  value={patient.id} key={patient.id}>{patient.name} </option>
-            ))}
-          </Form.Select>
-        </Form.Group>
-
+        {values.appointmentType !== personalType.id && (
+          <Form.Group className="mb-3" as={Col}>
+            <Form.Label>Paciente</Form.Label>
+            <Form.Select name="patient" onChange={onChange}>
+              <option selected={values.patient === ""}>Selecione</option>
+              {patients.map((patient) => (
+                <option selected={values.patient === patient.id} value={patient.id} key={patient.id}>{patient.name} </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        )}
         <Form.Group className="mb-3">
           <Form.Label>Descrição</Form.Label>
           <Form.Control type="textarea" name="description" id="description" rows={3} value={values.description} placeholder="Descrição do compromisso" onChange={onChange} required />
         </Form.Group>
-
-        <Button variant="primary" className="justify-content-end" onClick={() => HandleSaveAppointment()}>
-          Salvar
-        </Button>
-
+        <Form.Group>
+          {id && (
+            <Button variant="danger" style={{ marginRight: '1rem' }} onClick={() => HandleDeleteAppointment(id)}>
+              Excluir
+            </Button>
+          )}
+          <Button variant="primary" className="justify-content-end" onClick={() => HandleSaveAppointment()}>
+            Salvar
+          </Button>
+        </Form.Group>
 
       </Form>
     </S.CardAppointment>

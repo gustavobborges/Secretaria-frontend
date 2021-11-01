@@ -46,7 +46,7 @@ export default function Header() {
 
       <S.HeaderRight>
         <S.Item>
-          <p>Bem vindo, {userName}</p>
+          <p>olá, {userName}</p>
           <p onClick={HandleLogout}><b>Sair</b></p>
         </S.Item>
       </S.HeaderRight>

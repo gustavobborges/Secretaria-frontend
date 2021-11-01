@@ -1,68 +1,65 @@
-import React,  { useState, useEffect }  from 'react';
+import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button } from 'react-bootstrap';
 import { BsSearch, BsFillTrashFill } from 'react-icons/bs';
-import './Table.css';
-import axios from 'axios';
-import { Modal, Button } from 'react-bootstrap';
+import getPatients from '../../services/patients';
 
-export default function Table({ appointments }) {
+export default function Table() {
+  const dispatch = useDispatch();
+  const patients = useSelector((state) => state.patients);
+  const userId = useSelector((state) => state.user.id);
 
-    async function DeleteAppointment(id) {
-        await axios.delete(`http://localhost:3004/appointments/${id}`).then((response) => {
-            console.log('excluido com sucesso');
-        })
-        window.location.href = "http://localhost:3000";
-    } 
-    
-    const columns = [
-        {
-            name: "Data",
-            selector: "date",
-            sortable: true,
-        },
-        {
-            name: "Hora",
-            selector: "time",
-            sortable: true,
-        },
-        {
-            name: "Nome",
-            selector: "name",
-            sortable: true,
-        },
-        {
-            name: "Descrição",
-            selector: "description",
-            sortable: true,
-        },
-        {
-            name: "Local",
-            selector: "place",
-            sortable: true,
-        },
-        {
-            name: "Ações",
-            cell:(row)=>[
-                <div className="col_action" key={row.id}>
-                    <Link to={`/edit/${row.id}`} className="btn btn-primary"><BsSearch/></Link>
-                    <Button onClick={() => DeleteAppointment(row.id)} className="btn btn-danger" ><BsFillTrashFill/></Button>
-                </div>        
-            ],
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
-        }
-    ]
+  useEffect(() => {
+    _getPatients();
+    if (patients !== [])
+      _getPatients();
+  }, []);
+
+  async function _getPatients() {
+    const data = await getPatients(userId);
+    dispatch({ type: 'SET_PATIENTS', payload: data });
+  };
+
+  const columns = [
+    {
+      name: "Nome",
+      selector: "name",
+      sortable: true,
+    },
+    {
+      name: "Última Consulta",
+      selector: "",
+      sortable: true,
+    },
+    {
+      name: "Próxima Consulta",
+      selector: "",
+      sortable: true,
+    },
+    {
+      name: "Ações",
+      cell: (row) => [
+        <div className="col_action" key={row.id}>
+          <Button onClick={() => alert('ver')} ><BsSearch /></Button>
+        </div>
+      ],
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    }
+  ]
 
   return (
-    <DataTable
-        title="Agenda"
+    <>
+      <DataTable
+        // title="Pacientes"
         columns={columns}
-        data={appointments}
+        data={patients}
         defaultSortField="date"
         pagination
-    >
-    </DataTable>
+      >
+      </DataTable>
+    </>
   )
 }

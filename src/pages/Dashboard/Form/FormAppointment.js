@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Row, Col, Button, CloseButton } from 'react-bootstrap';
-import getPatients from '../../../services/patients';
+import { getPatients } from '../../../services/patients';
 import { getAppointments, createOrUpdateAppointment, deleteAppointment } from '../../../services/appointments';
 import dateFormater from '../../../utils/dateFormater';
 import * as S from './styles';

@@ -63,12 +63,12 @@ const PagesDashboard = () => {
   return (
     <S.Dashboard>
       {showForm && (
-        <S.DashboardTop className="col-lg-8 col-sm-12">
+        <div className="col-lg-8 col-sm-12 mb-4">
           <FormAppointment />
-        </S.DashboardTop>
+        </div>
       )}
 
-      <S.DashboardDown className="col-lg-8 col-sm-12" >
+      <div className="col-lg-8 col-sm-12" >
         <Calendar
           localizer={localizer}
           events={events}
@@ -83,7 +83,7 @@ const PagesDashboard = () => {
           }}
           onSelectEvent={event => handleSelectAppointment(event)}
         />
-      </S.DashboardDown>
+      </div>
 
       <Button className="mt-3" onClick={() => handleCreateAppointment()} style={{ backgroundColor: 'white', border: 0, color: 'black' }}>Novo compromisso</Button>
     </S.Dashboard>

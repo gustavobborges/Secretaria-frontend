@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import { BsSearch, BsFillTrashFill } from 'react-icons/bs';
-import getPatients from '../../services/patients';
+import { BsSearch } from 'react-icons/bs';
+import { getPatients } from '../../services/patients';
 
 export default function Table() {
   const dispatch = useDispatch();
@@ -20,6 +20,13 @@ export default function Table() {
     const data = await getPatients(userId);
     dispatch({ type: 'SET_PATIENTS', payload: data });
   };
+
+  const handleSelectPatient = (event) => {
+    const selectedPatient = patients.filter((patient) => patient.id === event.resource);
+    console.log('selectedPatient', selectedPatient)
+    dispatch({ type: 'SET_SELECTED_PATIENT', payload: selectedPatient[0] });
+    dispatch({ type: 'SET_SHOW_FORM', payload: true });
+  }
 
   const columns = [
     {
@@ -41,7 +48,7 @@ export default function Table() {
       name: "Ações",
       cell: (row) => [
         <div className="col_action" key={row.id}>
-          <Button onClick={() => alert('ver')} ><BsSearch /></Button>
+          <Button onClick={(event) => handleSelectPatient(event)} ><BsSearch /></Button>
         </div>
       ],
       ignoreRowClick: true,

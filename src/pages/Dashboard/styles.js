@@ -7,10 +7,3 @@ export const Dashboard = styled.div`
   justify-content: center;
   align-items: center;
 `
-
-export const DashboardTop = styled.div`
-  margin-bottom: 2rem; 
-`
-
-export const DashboardDown = styled.div`
-`

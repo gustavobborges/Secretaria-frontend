@@ -57,10 +57,15 @@ const reducer = (state = initialState, action) => {
       }
 
     case 'SET_SELECTED_APPOINTMENT':
-      console.log(action.payload)
       return {
         ...state,
         selectedAppointment: action.payload
+      }
+
+    case 'SET_SELECTED_PATIENT':
+      return {
+        ...state,
+        selectedPatient: action.payload
       }
       
     case 'SET_SELECTED_MENU':

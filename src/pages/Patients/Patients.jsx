@@ -24,9 +24,9 @@ export default function PagesPatients() {
         </div>
       )}
 
-      <div className="col-lg-8 col-sm-12">
+      <S.PatientTableContent className="col-lg-8 col-sm-12">
         <PatientsTable />
-      </div>
+      </S.PatientTableContent>
 
       <Button className="mt-3" onClick={() => handleCreatePatient()} style={{ backgroundColor: 'white', border: 0, color: 'black' }}>Novo compromisso</Button>
 

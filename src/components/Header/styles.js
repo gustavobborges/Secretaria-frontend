@@ -25,8 +25,7 @@ export const Item = styled.div`
   display: flex;
   gap: 1rem;
   font-size: 14px;
-
-  
+  margin-left: 15px;
 
   .isSelected { 
     width: 100%;

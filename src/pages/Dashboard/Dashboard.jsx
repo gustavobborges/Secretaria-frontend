@@ -45,12 +45,10 @@ const PagesDashboard = () => {
       });
     })
     setEvents(array);
-    console.log(array)
   }, [appointments]);
 
   const handleSelectAppointment = (event) => {
     const selectedAppointment = appointments.filter((appointment) => appointment.id === event.resource);
-    console.log('selectedAppointment', selectedAppointment)
     dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: selectedAppointment[0] });
     dispatch({ type: 'SET_SHOW_FORM', payload: true });
   }

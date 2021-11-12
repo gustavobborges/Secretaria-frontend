@@ -6,8 +6,10 @@ import * as S from './styles';
 
 const initialValue = {
   name: "",
+  address: "",
   phone: "",
   record: "",
+  email: "",
 }
 
 const FormPatient = () => {
@@ -15,7 +17,7 @@ const FormPatient = () => {
   const selectedPatient = useSelector((state) => state.selectedPatient);
   const patients = useSelector((state) => state.patients);
   const userId = useSelector((state) => state.user.id);
-  const id = selectedPatient.id;
+  const id = selectedPatient?.id;
 
   const [values, setValues] = useState(id ? selectedPatient : initialValue);
 
@@ -31,28 +33,36 @@ const FormPatient = () => {
   };
 
   const HandleSavePatient = async (event) => {
-    // const patientSubmit = values.patientType === personalType.id ? null : values.patient;
     const payload = {
-      ...values
+      ...values,
+      user: userId,
     }
     const method = id ? 'put' : 'post';
-    await createOrUpdatePatient(method, payload, id)
+    const { data } = await createOrUpdatePatient(method, payload, id)
       .then((response) => {
-        dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {} });
+        dispatch({ type: 'SET_SELECTED_PATIENT', payload: {} });
         dispatch({ type: 'SET_SHOW_FORM', payload: false });
         return response
       });
-    const newPatients = await getPatients(userId);
-    dispatch({ type: 'SET_APPOINTMENTS', payload: newPatients });
+
+    if (method === 'put') {
+      const newPatients = await getPatients(userId);
+      await dispatch({ type: 'SET_PATIENTS', payload: newPatients});
+    } else if (method === 'post') {
+      const newPatients = patients.concat(data);
+      dispatch({ type: 'SET_PATIENTS', payload: newPatients });
+    }
+    dispatch({ type: 'SET_SELECTED_MENU', payload: 'patients' });
+
   }
 
   const HandleDeletePatient = async (id) => {
     await deletePatient(id).then((response) => {
-      dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {} });
+      dispatch({ type: 'SET_SELECTED_PATIENT', payload: {} });
       dispatch({ type: 'SET_SHOW_FORM', payload: false });
     });
     const newPatients = await getPatients(userId);
-    dispatch({ type: 'SET_APPOINTMENTS', payload: newPatients });
+    dispatch({ type: 'SET_PATIENTS', payload: newPatients });
   }
 
   const onChange = (event) => {
@@ -78,19 +88,24 @@ const FormPatient = () => {
 
         <Form.Group className="mb-3">
           <Form.Label>Endereço</Form.Label>
-          <Form.Control type="text" name="place" id="place" placeholder="Endereço" required />
+          <Form.Control type="text" name="address" id="address" value={values.address} onChange={onChange} placeholder="Endereço" required />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Telefone</Form.Label>
-          <Form.Control type="text" name="place" id="place" value={values.phone} onChange={onChange} placeholder="Telefone" required />
+          <Form.Control type="text" name="phone" id="phone" value={values.phone} onChange={onChange} placeholder="Telefone" required />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Email</Form.Label>
+          <Form.Control type="email" name="email" id="email" value={values.email} onChange={onChange} placeholder="Email" required />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Amnese</Form.Label>
           <Form.Control type="textarea" name="record" id="record" rows={3} value={values.record} placeholder="Amnese/descrição" onChange={onChange} required />
         </Form.Group>
-        
+
         <Form.Group>
           {id && (
             <Button variant="danger" style={{ marginRight: '1rem' }} onClick={() => HandleDeletePatient(id)}>

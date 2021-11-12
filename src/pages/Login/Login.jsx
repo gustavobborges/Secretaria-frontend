@@ -40,11 +40,7 @@ const PagesLogin = () => {
         id: user.data.user.id,
         email: user.data.user.email
       }
-
-      console.log(`======`)
-      console.log(JSON.stringify(payloadUser))
-      console.log(`======`)
-
+  
       dispatch({ type: 'LOGIN', payload: payloadUser });
       localStorage.setItem('session', payloadUser.session);
       localStorage.setItem('name', payloadUser.name);
@@ -54,7 +50,6 @@ const PagesLogin = () => {
       
     } catch (error) {
       alert('O usuário e senha não conferem');
-      console.log(`deu ruim.. erro: ${error}`)
     }
   }
 

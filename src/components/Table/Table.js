@@ -21,10 +21,8 @@ export default function Table() {
     dispatch({ type: 'SET_PATIENTS', payload: data });
   };
 
-  const handleSelectPatient = (event) => {
-    const selectedPatient = patients.filter((patient) => patient.id === event.resource);
-    console.log('selectedPatient', selectedPatient)
-    dispatch({ type: 'SET_SELECTED_PATIENT', payload: selectedPatient[0] });
+  const handleSelectPatient = (patient) => {
+    dispatch({ type: 'SET_SELECTED_PATIENT', payload: patient });
     dispatch({ type: 'SET_SHOW_FORM', payload: true });
   }
 
@@ -46,11 +44,11 @@ export default function Table() {
     },
     {
       name: "Ações",
-      cell: (row) => [
-        <div className="col_action" key={row.id}>
-          <Button onClick={(event) => handleSelectPatient(event)} ><BsSearch /></Button>
+      cell: row => (
+        <div className="col_action" key={row['id']}>
+          <Button onClick={() => handleSelectPatient(row)} ><BsSearch /></Button>
         </div>
-      ],
+      ),
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,

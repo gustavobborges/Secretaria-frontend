@@ -15,6 +15,7 @@ const initialState = {
   selectedAppointment: {},
   selectedPatient: {},
   selectedMenu: 'appointments',
+  screenSize: {},
 };
 
 const reducer = (state = initialState, action) => {
@@ -38,7 +39,6 @@ const reducer = (state = initialState, action) => {
       }
 
     case 'SET_APPOINTMENTS':
-      console.log(action.payload)
       return {
         ...state,
         appointments: action.payload
@@ -72,6 +72,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         selectedMenu: action.payload
+      }
+
+    case 'SET_SCREEN_SIZE':
+      return {
+        ...state,
+        screenSize: action.payload
       }
     default:
       return state;

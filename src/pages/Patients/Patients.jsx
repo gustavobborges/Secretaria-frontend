@@ -28,7 +28,7 @@ export default function PagesPatients() {
         <PatientsTable />
       </S.PatientTableContent>
 
-      <Button className="mt-3" onClick={() => handleCreatePatient()} style={{ backgroundColor: 'white', border: 0, color: 'black' }}>Novo compromisso</Button>
+      <Button className="mt-3" onClick={() => handleCreatePatient()} style={{ backgroundColor: 'white', border: 0, color: 'black' }}>Novo paciente</Button>
 
     </S.Patients>
   )

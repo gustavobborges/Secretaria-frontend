@@ -83,27 +83,27 @@ const FormPatient = () => {
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Nome</Form.Label>
-          <Form.Control type="text" name="name" id="name" value={values.name} onChange={onChange} placeholder="Nome" required />
+          <Form.Control maxLength="55" type="text" name="name" max="90" id="name" value={values.name} onChange={onChange} placeholder="Nome" required />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Endereço</Form.Label>
-          <Form.Control type="text" name="address" id="address" value={values.address} onChange={onChange} placeholder="Endereço" required />
+          <Form.Control maxLength="55" type="text" name="address" id="address" value={values.address} onChange={onChange} placeholder="Endereço" required />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Telefone</Form.Label>
-          <Form.Control type="text" name="phone" id="phone" value={values.phone} onChange={onChange} placeholder="Telefone" required />
+          <Form.Control maxLength="11" type="phone" name="phone" id="phone"value={values.phone} onChange={onChange} placeholder="Telefone" required />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" name="email" id="email" value={values.email} onChange={onChange} placeholder="Email" required />
+          <Form.Control maxLength="55" type="email" name="email" id="email" value={values.email} onChange={onChange} placeholder="Email" required />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Amnese</Form.Label>
-          <Form.Control type="textarea" name="record" id="record" rows={3} value={values.record} placeholder="Amnese/descrição" onChange={onChange} required />
+          <Form.Control maxLength="720" as="textArea" name="record" id="record" rows={3} value={values.record} placeholder="Amnese/descrição" onChange={onChange} required />
         </Form.Group>
 
         <Form.Group>

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs';
 import { getPatients } from '../../services/patients';
+import * as S from './styles';
 
 export default function Table() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ export default function Table() {
       name: "Nome",
       selector: "name",
       sortable: true,
+      
     },
     {
       name: "Última Consulta",
@@ -56,15 +58,16 @@ export default function Table() {
   ]
 
   return (
-    <>
+    <S.Container>
       <DataTable
         // title="Pacientes"
         columns={columns}
         data={patients}
         defaultSortField="date"
         pagination
+        defaultSortFieldId={1}
       >
       </DataTable>
-    </>
+    </S.Container>
   )
 }

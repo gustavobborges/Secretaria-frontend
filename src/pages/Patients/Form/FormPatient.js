@@ -93,7 +93,7 @@ const FormPatient = () => {
 
         <Form.Group className="mb-3">
           <Form.Label>Telefone</Form.Label>
-          <Form.Control maxLength="11" type="phone" name="phone" id="phone"value={values.phone} onChange={onChange} placeholder="Telefone" required />
+          <Form.Control maxLength="11" type="phone" name="phone" id="phone" value={values.phone} onChange={onChange} placeholder="Telefone" required />
         </Form.Group>
 
         <Form.Group className="mb-3">

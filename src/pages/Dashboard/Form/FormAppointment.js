@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Row, Col, Button, CloseButton } from 'react-bootstrap';
 import { getPatients } from '../../../services/patients';
-import { getAppointments, createOrUpdateAppointment, deleteAppointment } from '../../../services/appointments';
+import { getAppointments, createOrUpdateAppointment, deleteAppointment, sendMessage } from '../../../services/appointments';
 import dateFormater from '../../../utils/dateFormater';
 import * as S from './styles';
 
@@ -23,6 +23,7 @@ const FormAppointment = () => {
   const appointmentsType = useSelector((state) => state.appointmentsType);
   const patients = useSelector((state) => state.patients);
   const userId = useSelector((state) => state.user.id);
+  const user = useSelector((state) => state.user);
   const id = selectedAppointment.id;
   const personalType = appointmentsType.find((type) => type.name === 'Pessoal');
 
@@ -73,6 +74,19 @@ const FormAppointment = () => {
     });
     const newAppointments = await getAppointments(userId);
     dispatch({ type: 'SET_APPOINTMENTS', payload: newAppointments });
+  }
+
+  console.log('selectedAppointment: ', selectedAppointment);
+
+  const handleSendMessage = async () => {
+    await sendMessage(
+        selectedAppointment.patient.phone,
+        selectedAppointment.initialDate,
+        user.name,
+        selectedAppointment.id
+      ).then((response) => {
+      alert('mensagem enviada');
+    })
   }
 
   const onChange = (event) => {
@@ -152,6 +166,26 @@ const FormAppointment = () => {
           <Form.Label>Descrição</Form.Label>
           <Form.Control type="textarea" name="description" id="description" rows={3} value={values.description} placeholder="Descrição do compromisso" onChange={onChange} required />
         </Form.Group>
+
+        <Form.Group className="mb-3 ">
+          <S.WhatsAppContainer>
+            <div className="send-row">
+              <Button variant="success" style={{ marginRight: '1rem' }} onClick={() => handleSendMessage()}>
+                Enviar mensagem
+              </Button>
+              <p>Ainda não enviado</p>
+            </div>
+            <div className="status-row">
+              <p>Status:</p>
+              <p>Visualizada</p>
+            </div>
+            <div className="response-row">
+              <p>Resposta:</p>
+              <p>Confirmado em 21/10/2021</p>
+            </div>
+          </S.WhatsAppContainer>
+        </Form.Group>
+
         <Form.Group>
           {id && (
             <Button variant="danger" style={{ marginRight: '1rem' }} onClick={() => HandleDeleteAppointment(id)}>

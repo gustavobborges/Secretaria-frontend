@@ -34,5 +34,18 @@ const deleteAppointment = async (id) => {
     console.log('Erro ao excluir compromissos: '.error);
   }
 }
+
+const sendMessage = async (phone, initialDate, userName, id) => {
+  try {
+    const data = await axios.post(`http://localhost:8000/appointment/sendMessage/${id}`,{
+      phone,
+      initialDate,
+      userName
+    });
+    return data;
+  } catch (error) {
+    console.log('Erro ao excluir compromissos: '.error);
+  }
+}
   
-export { getAppointments, getAppointmentsTypes, createOrUpdateAppointment, deleteAppointment };
+export { getAppointments, getAppointmentsTypes, createOrUpdateAppointment, deleteAppointment, sendMessage };

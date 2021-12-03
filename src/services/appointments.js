@@ -35,12 +35,15 @@ const deleteAppointment = async (id) => {
   }
 }
 
-const sendMessage = async (phone, initialDate, userName, id) => {
+const sendMessage = async (patient, phone, initialDate, userName, id, confirmationSendedDate, confirmationStatus) => {
   try {
     const data = await axios.post(`http://localhost:8000/appointment/sendMessage/${id}`,{
+      patient,
       phone,
       initialDate,
-      userName
+      confirmationSendedDate,
+      userName,
+      confirmationStatus
     });
     return data;
   } catch (error) {

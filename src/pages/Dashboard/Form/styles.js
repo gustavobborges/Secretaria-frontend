@@ -21,19 +21,29 @@ export const WhatsAppContainer = styled.div`
   
   .send-row {
     display: flex;
-    gap: .5rem;
-
     align-items: center;
+  }
+
+  .confirmation-status {
+    font-weight: 700;
+  }
+
+  .messaged-sended {
+    font-size: 12px;
+    font-weight: 700;
   }
 
   .status-row {
     display: flex;
     gap: .5rem;
+    align-items: center;
   }
 
-  .response-row {
-    display: flex;
-    gap: .5rem;
+  .confirmed-at {
+    font-size: 13px;
   }
 
+  .status {
+    font-size: 13px;
+  }
 `

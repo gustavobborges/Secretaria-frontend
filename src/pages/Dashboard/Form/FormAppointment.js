@@ -80,13 +80,25 @@ const FormAppointment = () => {
 
   const handleSendMessage = async () => {
     await sendMessage(
+        selectedAppointment.patient.name,
         selectedAppointment.patient.phone,
         selectedAppointment.initialDate,
         user.name,
-        selectedAppointment.id
-      ).then((response) => {
-      alert('mensagem enviada');
-    })
+        selectedAppointment.id,
+        new Date(),
+        'Enviado',
+      );
+
+    dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {
+      ...selectedAppointment,
+      confirmationSendedDate: new Date(),
+      confirmationStatus: 'Enviado'
+    } });
+
+    const newAppointments = await getAppointments(userId);
+    dispatch({ type: 'SET_APPOINTMENTS', payload: newAppointments });
+
+
   }
 
   const onChange = (event) => {
@@ -167,24 +179,38 @@ const FormAppointment = () => {
           <Form.Control type="textarea" name="description" id="description" rows={3} value={values.description} placeholder="Descrição do compromisso" onChange={onChange} required />
         </Form.Group>
 
-        <Form.Group className="mb-3 ">
-          <S.WhatsAppContainer>
-            <div className="send-row">
-              <Button variant="success" style={{ marginRight: '1rem' }} onClick={() => handleSendMessage()}>
-                Enviar mensagem
-              </Button>
-              <p>Ainda não enviado</p>
-            </div>
-            <div className="status-row">
-              <p>Status:</p>
-              <p>Visualizada</p>
-            </div>
-            <div className="response-row">
-              <p>Resposta:</p>
-              <p>Confirmado em 21/10/2021</p>
-            </div>
-          </S.WhatsAppContainer>
-        </Form.Group>
+        {id && (
+          <Form.Group className="mb-3 ">
+            <S.WhatsAppContainer>
+              <div className="send-row">
+                {!selectedAppointment?.confirmationSendedDate && (
+                  <Button variant="success" style={{ marginRight: '1rem' }} onClick={() => handleSendMessage()}>
+                    Enviar mensagem
+                  </Button>
+                )}
+                {selectedAppointment?.confirmationSendedDate && (
+                  <Button variant="success" style={{ marginRight: '1rem', filter: 'grayscale(50%)' }} onClick={() => handleSendMessage()}>
+                    Enviar mensagem novamente
+                  </Button>
+                )}
+
+                <p className="messaged-sended">{selectedAppointment?.confirmationSendedDate ? `Mensagem enviada em ${new Date(selectedAppointment?.confirmationSendedDate)}` : 'Ainda não enviado'}</p>
+              </div>
+
+              {selectedAppointment?.confirmationSendedDate && (
+                <div className="status-row">
+                  <p className="status">status:</p>
+                  <p className="confirmation-status">{selectedAppointment?.confirmationStatus}</p>
+                  {selectedAppointment?.confirmationStatus === 'Confirmado' && (
+                    <p className="confirmed-at">em {selectedAppointment?.confirmationResponsedDate}.</p> 
+                  )}
+                </div>
+              )}
+
+            </S.WhatsAppContainer>
+          </Form.Group>
+        )}
+
 
         <Form.Group>
           {id && (

@@ -19,7 +19,7 @@ export default function PagesPatients() {
   return (
     <S.Patients>
       {showForm && (
-        <div className="col-lg-8 col-sm-12 mb-4">
+        <div className="col-12 col-lg-8 mb-4">
           <FormPatient />
         </div>
       )}

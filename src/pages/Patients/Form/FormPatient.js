@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, CloseButton, Form } from 'react-bootstrap';
 import { getPatients, createOrUpdatePatient, deletePatient } from '../../../services/patients';
+import InputMask from "react-input-mask";
 import * as S from './styles';
 
 const initialValue = {
@@ -27,6 +28,9 @@ const FormPatient = () => {
     }
   }, [patients]);
 
+
+
+  console.log('selectedPatient', selectedPatient);
   const _getPatients = async () => {
     const data = await getPatients(userId);
     dispatch({ type: 'SET_PATIENTS', payload: data });
@@ -91,9 +95,11 @@ const FormPatient = () => {
           <Form.Control maxLength="55" type="text" name="address" id="address" value={values.address} onChange={onChange} placeholder="Endereço" required />
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        <Form.Group className="form-mask mb-3">
           <Form.Label>Telefone</Form.Label>
-          <Form.Control maxLength="11" type="phone" name="phone" id="phone" value={values.phone} onChange={onChange} placeholder="Telefone" required />
+          <InputMask  mask="(99) 9 9999-9999" value={values.phone} onChange={onChange}>
+            <Form.Control type="phone" name="phone" id="phone" value={values.phone} onChange={onChange} placeholder="Telefone" required />
+          </InputMask>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -103,7 +109,9 @@ const FormPatient = () => {
 
         <Form.Group className="mb-3">
           <Form.Label>Amnese</Form.Label>
-          <Form.Control maxLength="720" as="textArea" name="record" id="record" rows={3} value={values.record} placeholder="Amnese/descrição" onChange={onChange} required />
+          <Form.Control maxLength="720" as="textArea" name="record" id="record" rows={3} value={values.record} onChange={onChange} placeholder="Amnese/descrição" required >
+          {values.record} 
+          </Form.Control>
         </Form.Group>
 
         <Form.Group>

@@ -1,13 +1,23 @@
 import React, { useEffect } from 'react';
 import * as S from './styles';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Header() {
   const userName = useSelector((state) => state.user.name);
   const selectedMenu = useSelector((state) => state.selectedMenu);
-  const screenSize = useSelector((state) => state.screenSize);
   const dispatch = useDispatch();
+  const history = useHistory();
+
+
+
+  useEffect(() => {
+    if (window.location.href.includes('patients')) {
+      dispatch({ type: 'SET_SELECTED_MENU', payload: 'patients' });
+    } else {
+      dispatch({ type: 'SET_SELECTED_MENU', payload: 'appointments' });
+    }
+  }, [window.location.href]);
 
   const HandleLogout = () => {
     localStorage.clear();
@@ -18,6 +28,7 @@ export default function Header() {
       email: ''
     }
     dispatch({ type: 'LOGIN', payload: payload });
+    history.push('/');
   }
 
   const HandleChangePage = (page) => {
@@ -26,25 +37,6 @@ export default function Header() {
     dispatch({ type: 'SET_SELECTED_PATIENT', payload: {} });
     dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {} });
   }
-
-  useEffect(() => {
-    console.log(selectedMenu);
-  })
-
-  function getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
-    return {
-      width,
-      height
-    };
-  }
-
-  useEffect(() => {
-    if (!screenSize !== {}) {
-      const data = getWindowDimensions();
-      dispatch({ type: 'SET_SCREEN_SIZE', payload: data });
-    }
-  }, [])
 
   return (
     <S.HeaderDiv>
@@ -68,9 +60,7 @@ export default function Header() {
 
       <S.HeaderRight>
         <S.Item>
-          {screenSize.width > 700 && (
-            <p>olá, {userName}</p>
-          )}
+          <p className="user-name">olá, {userName}</p>
           <p onClick={HandleLogout}><b>Sair</b></p>
         </S.Item>
         

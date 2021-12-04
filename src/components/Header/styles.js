@@ -20,6 +20,7 @@ export const HeaderRight = styled.div`
   display: flex;
 `
 
+
 export const Item = styled.div`
   cursor: pointer;
   display: flex;
@@ -45,4 +46,10 @@ export const Item = styled.div`
     margin: 0;
     padding: .5rem;
   }
+
+  .user-name {
+    @media(max-width: 800px) {
+      display: none;
+  };
+}
 `

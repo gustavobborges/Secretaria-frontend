@@ -60,7 +60,6 @@ export default function Table() {
   return (
     <S.Container>
       <DataTable
-        // title="Pacientes"
         columns={columns}
         data={patients}
         defaultSortField="date"

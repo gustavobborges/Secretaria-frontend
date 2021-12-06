@@ -46,7 +46,6 @@ const PagesLogin = () => {
       localStorage.setItem('email', payloadUser.email);
       localStorage.setItem('id', payloadUser.id);
       history.push('/');
-      
     } catch (error) {
       alert('O usuário e senha não conferem');
     }

@@ -1,5 +1,5 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Header from '../components/Header/Header';
 import PagesPatients from './Patients/Patients';
 import PagesDashboard from './Dashboard/Dashboard';
@@ -8,9 +8,18 @@ import PagesSingup from './Singup/Singup';
 import PagesResetPassword from './ResetPassword/ResetPassword';
 import PagesRequestResetPassword from './ResetPassword/RequestResetPassword.jsx';
 
-
 function Root() {
+  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user);
+  if (currentUser?.session?.length === 0 && localStorage.getItem('session')) {
+    const userStorage = {
+      session: localStorage.getItem('session'),
+      name: localStorage.getItem('name'),
+      email: localStorage.getItem('email'),
+      id: localStorage.getItem('id')
+    }
+    dispatch({ type: 'LOGIN', payload: userStorage });
+  }
 
   return (
     <BrowserRouter>

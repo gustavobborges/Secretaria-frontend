@@ -37,5 +37,6 @@ export const Title = styled.div`
 
   @media(max-width: 800px) {
     margin-top: 2rem;
+    text-align: center;
   };
 `

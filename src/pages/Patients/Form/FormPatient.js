@@ -28,17 +28,16 @@ const FormPatient = () => {
     }
   }, [patients]);
 
-
-
-  console.log('selectedPatient', selectedPatient);
   const _getPatients = async () => {
     const data = await getPatients(userId);
     dispatch({ type: 'SET_PATIENTS', payload: data });
   };
 
   const HandleSavePatient = async (event) => {
+    const formattedPhone = values.phone.replace(/\D/g,'');;
     const payload = {
       ...values,
+      phone: formattedPhone,
       user: userId,
     }
     const method = id ? 'put' : 'post';
@@ -71,7 +70,11 @@ const FormPatient = () => {
 
   const onChange = (event) => {
     const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+    let newValue = value;
+    if (name === 'name' || name === 'address') {
+      newValue = value.charAt(0).toUpperCase() + value.slice(1);
+    }
+    setValues({ ...values, [name]: newValue });
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,6 @@ const PagesLogin = () => {
   const [password, setPassword] = useState();
   const dispatch = useDispatch();
   const history = useHistory();
-  const currentUser = useSelector((state) => state.user);
 
   if (localStorage.getItem('session')) {
     const userStorage = {
@@ -55,13 +54,14 @@ const PagesLogin = () => {
 
   return (
     <S.LoginPage>
+
+      <S.Title>
+        <p>SECRETÁRIA</p>
+      </S.Title>
       <Form>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email</Form.Label>
           <Form.Control type="email" placeholder="Email" onBlur={(e) => setEmail(e.target.value)} />
-          <Form.Text className="text-muted">
-            Nós não compartilharemos seu email com ninguém.
-          </Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -71,10 +71,16 @@ const PagesLogin = () => {
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Lembrar de mim" />
         </Form.Group>
-        <Button variant="primary" onClick={HandleSubmitLogin}>
+
+        <Button className="login-button" variant="primary" onClick={HandleSubmitLogin}>
           Entrar
         </Button>
       </Form>
+
+      <div className="login-actions">
+          <p onClick={() => history.push('/singup')}>Sou novo aqui</p>
+          <p onClick={() => history.push('/request-reset')}>Recuperar Senha</p>
+      </div>
     </S.LoginPage>
 
   )

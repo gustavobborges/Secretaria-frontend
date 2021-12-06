@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import * as S from './styles';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,8 +8,6 @@ export default function Header() {
   const selectedMenu = useSelector((state) => state.selectedMenu);
   const dispatch = useDispatch();
   const history = useHistory();
-
-
 
   useEffect(() => {
     if (window.location.href.includes('patients')) {
@@ -55,7 +53,6 @@ export default function Header() {
             </div>
           </S.Item>
         </Link>
-
       </S.HeaderCenter>
 
       <S.HeaderRight>
@@ -63,8 +60,6 @@ export default function Header() {
           <p className="user-name">olá, {userName}</p>
           <p onClick={HandleLogout}><b>Sair</b></p>
         </S.Item>
-        
-
       </S.HeaderRight>
     </S.HeaderDiv>
   )

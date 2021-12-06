@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import { Button } from 'react-bootstrap';
-import moment from 'moment'
+import moment from 'moment';
 import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
 import { getAppointments, getAppointmentsTypes } from '../../services/appointments';
 import * as S from './styles';
@@ -41,14 +41,18 @@ const PagesDashboard = () => {
         start: new Date(appointment.initialDate),
         end: new Date(appointment.finalDate),
         allDay: false,
-        resource: appointment.id
+        resource: {
+          id: appointment.id,
+          appointmentType: appointment.appointmentType.name,
+          status: appointment?.confirmationStatus
+        }
       });
     })
     setEvents(array);
   }, [appointments]);
 
   const handleSelectAppointment = (event) => {
-    const selectedAppointment = appointments.filter((appointment) => appointment.id === event.resource);
+    const selectedAppointment = appointments.filter((appointment) => appointment.id === event.resource.id);
     dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: selectedAppointment[0] });
     dispatch({ type: 'SET_SHOW_FORM', payload: true });
   }
@@ -56,6 +60,26 @@ const PagesDashboard = () => {
   const handleCreateAppointment = () => {
     dispatch({ type: 'SET_SELECTED_APPOINTMENT', payload: {} });
     dispatch({ type: 'SET_SHOW_FORM', payload: true });
+  }
+
+  const eventsStyle = (event, start, end, isSelected) => {
+    console.log('event', event);
+    let background;
+    if (event.resource.appointmentType === 'Pessoal') {
+      background = '#FF7733';
+    } else {
+      if (event.resource.status === 'Confirmado') {
+        background = '#198754';
+      } else {
+        background = '#3174ad';
+      }
+    }
+    var style = {
+        backgroundColor: background,
+    };
+    return {
+        style: style
+    };
   }
 
   return (
@@ -80,6 +104,7 @@ const PagesDashboard = () => {
             boxShadow: '0 0 0.4em lightgray'
           }}
           onSelectEvent={event => handleSelectAppointment(event)}
+          eventPropGetter={eventsStyle}
         />
       </div>
 

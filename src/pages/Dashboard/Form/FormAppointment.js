@@ -97,8 +97,6 @@ const FormAppointment = () => {
 
     const newAppointments = await getAppointments(userId);
     dispatch({ type: 'SET_APPOINTMENTS', payload: newAppointments });
-
-
   }
 
   const onChange = (event) => {
@@ -114,7 +112,11 @@ const FormAppointment = () => {
         setfinalTime(value)
         break;
       default:
-        setValues({ ...values, [name]: value });
+        let newValue = value;
+        if (name === 'name' || name === 'place') {
+          newValue = value.charAt(0).toUpperCase() + value.slice(1);
+        }
+        setValues({ ...values, [name]: newValue });
         break;
     }
   }
@@ -179,7 +181,7 @@ const FormAppointment = () => {
           <Form.Control type="textarea" name="description" id="description" rows={3} value={values.description} placeholder="Descrição do compromisso" onChange={onChange} required />
         </Form.Group>
 
-        {id && (
+        {(id && selectedAppointment.appointmentType.name === 'Profissional') && (
           <Form.Group className="mb-3 ">
             <S.WhatsAppContainer>
               <div className="send-row">

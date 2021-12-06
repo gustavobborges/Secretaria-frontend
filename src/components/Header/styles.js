@@ -50,6 +50,6 @@ export const Item = styled.div`
   .user-name {
     @media(max-width: 800px) {
       display: none;
-  };
+    };
 }
 `

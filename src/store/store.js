@@ -15,6 +15,7 @@ const initialState = {
   selectedAppointment: {},
   selectedPatient: {},
   selectedMenu: 'appointments',
+  isSingup : false
 };
 
 const reducer = (state = initialState, action) => {
@@ -29,6 +30,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload
+      }
+
+    case 'SINGUP':
+      return {
+        ...state,
+        isSingup: action.payload
       }
 
     case 'SET_APPOINTMENTS_TYPE':

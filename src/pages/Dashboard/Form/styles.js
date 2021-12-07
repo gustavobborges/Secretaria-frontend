@@ -18,6 +18,20 @@ export const WhatsAppContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: .5rem;
+
+  .confirmado {
+    padding: .5rem;
+    background-color: #3CB371;
+    border-radius: .5rem;
+    border: 1px solid #00FF7F;
+  }
+
+  .desmarcado {
+    padding: .5rem;
+    background-color: #FFA07A;
+    border-radius: .5rem;
+    border: 1px solid #FF6347;
+  }
   
   .send-row {
     display: flex;
@@ -37,6 +51,7 @@ export const WhatsAppContainer = styled.div`
     display: flex;
     gap: .5rem;
     align-items: center;
+    margin-top: .5rem;
   }
 
   .confirmed-at {

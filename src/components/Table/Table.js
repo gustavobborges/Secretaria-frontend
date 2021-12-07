@@ -34,16 +34,16 @@ export default function Table() {
       sortable: true,
       
     },
-    {
-      name: "Última Consulta",
-      selector: "",
-      sortable: true,
-    },
-    {
-      name: "Próxima Consulta",
-      selector: "",
-      sortable: true,
-    },
+    // {
+    //   name: "Última Consulta",
+    //   selector: "",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Próxima Consulta",
+    //   selector: "",
+    //   sortable: true,
+    // },
     {
       name: "Ações",
       cell: row => (

@@ -60,12 +60,12 @@ const PagesLogin = () => {
       <Form>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" placeholder="Email" onBlur={(e) => setEmail(e.target.value)} />
+          <Form.Control type="email" maxLength="55" placeholder="Email" onBlur={(e) => setEmail(e.target.value)} />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Senha</Form.Label>
-          <Form.Control type="password" placeholder="Password" onBlur={(e) => setPassword(e.target.value)} />
+          <Form.Control type="password" maxLength="55" placeholder="Senha" onBlur={(e) => setPassword(e.target.value)} />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Lembrar de mim" />

@@ -17,26 +17,33 @@ const PagesRequestResetPassword = () => {
   const history = useHistory();
 
   const HandleSendEmail = async () => {
-    try {
-      const payload = {
-        email: values.email,
-      };
 
-      console.log('payload', payload);
-      const { data } = await axios.post('http://localhost:8000/user/getByEmail', payload);
-      console.log('data', data);
-      const userId = data.id;
-
-      console.log('userId', userId);
-      if (userId !== 'error') {
-        const responseEmail = await sendEmailReset(values.email, userId);
-        console.log('responseEmail', responseEmail);
-      } else {
-        alert('Não existe usuário para este email')
+    if (values.email !== "") {
+      try {
+        const payload = {
+          email: values.email,
+        };
+  
+        console.log('payload', payload);
+        const { data } = await axios.post('http://localhost:8000/user/getByEmail', payload);
+        console.log('data', data);
+        const userId = data.id;
+  
+        console.log('userId', userId);
+        if (userId !== 'error') {
+          const responseEmail = await sendEmailReset(values.email, userId);
+          console.log('responseEmail', responseEmail);
+        } else {
+          alert('Não existe usuário para este email.')
+        }
+      } catch (error) {
+        alert('Erro ao obter os dados do usuário.', error);
       }
-    } catch (error) {
-      alert('Não foi possível obter os dados do usuário');
     }
+    else {
+      alert('Informe um email.');
+    }
+    
   }
 
   const onChange = (event) => {
@@ -52,7 +59,7 @@ const PagesRequestResetPassword = () => {
       <Form>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" name="email" placeholder="Email" value={values.email} onChange={onChange}/>
+          <Form.Control maxLength="55" type="email" name="email" placeholder="Email" value={values.email} onChange={onChange}/>
         </Form.Group>
         <Button className="login-button" variant="primary" onClick={() => HandleSendEmail()}>
           Enviar email

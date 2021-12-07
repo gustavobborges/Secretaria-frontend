@@ -35,19 +35,21 @@ const PagesDashboard = () => {
 
   useEffect(() => {
     const array = [];
-    Object.values(appointments).map((appointment) => {
-      array.push({
-        title: appointment.name,
-        start: new Date(appointment.initialDate),
-        end: new Date(appointment.finalDate),
-        allDay: false,
-        resource: {
-          id: appointment.id,
-          appointmentType: appointment.appointmentType.name,
-          status: appointment?.confirmationStatus
-        }
-      });
-    })
+    if (appointments) {
+      Object.values(appointments).map((appointment) => {
+        array.push({
+          title: appointment.name,
+          start: new Date(appointment.initialDate),
+          end: new Date(appointment.finalDate),
+          allDay: false,
+          resource: {
+            id: appointment.id,
+            appointmentType: appointment.appointmentType.name,
+            status: appointment?.confirmationStatus
+          }
+        });
+      })
+    }
     setEvents(array);
   }, [appointments]);
 
@@ -70,6 +72,8 @@ const PagesDashboard = () => {
     } else {
       if (event.resource.status === 'Confirmado') {
         background = '#198754';
+      } else if (event.resource.status === 'Desmarcado') {
+        background = '#B22222';
       } else {
         background = '#3174ad';
       }

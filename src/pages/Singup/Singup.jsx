@@ -19,38 +19,42 @@ const PagesSingup = () => {
   const history = useHistory();
 
   const HandleSubmitSingup = async () => {
-    const payload = {
-      name: values.name,
-      email: values.email,
-      password: values.password
-    };
 
-    if (values.password === values.passwordConfirmation) {
-      try {
-        const { data } = await axios.post('http://localhost:8000/user', values);  
-        
-        const payloadUser = {
-          name: data.user.name,
-          email: data.user.email,
-          id: data.user.id,
-          session: data.token
+    if (values.name !== '' || values.email !== '' || values.password !== '') {
+      const payload = {
+        name: values.name,
+        email: values.email,
+        password: values.password
+      };
+  
+      if (values.password === values.passwordConfirmation) {
+        try {
+          const { data } = await axios.post('http://localhost:8000/user', values);  
+          
+          const payloadUser = {
+            name: data.user.name,
+            email: data.user.email,
+            id: data.user.id,
+            session: data.token
+          }
+          console.log('payloadUser', payloadUser);
+          dispatch({ type: 'LOGIN', payload: payloadUser });
+          localStorage.setItem('session', data.token);
+          localStorage.setItem('name', data.user.name);
+          localStorage.setItem('email', data.user.email);
+          localStorage.setItem('id', data.user.id);
+          history.push('/');
+          
+        } catch (error) {
+          alert('Erro ao criar usuário. ', error);
         }
-        console.log('payloadUser', payloadUser);
-        dispatch({ type: 'LOGIN', payload: payloadUser });
-        localStorage.setItem('session', data.token);
-        localStorage.setItem('name', data.user.name);
-        localStorage.setItem('email', data.user.email);
-        localStorage.setItem('id', data.user.id);
-        history.push('/');
-        
-      } catch (error) {
-        alert('O usuário não pode ser criado');
+      } else {
+        alert('As senhas não conferem.');
       }
-    } else {
-      alert('As senhas não conferem');
+    }  else {
+      alert('Todos os campos são obrigatórios.');
     }
   }
-
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -66,19 +70,19 @@ const PagesSingup = () => {
       <Form>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Nome</Form.Label>
-          <Form.Control type="text" name="name" placeholder="Nome" value={values.name} onChange={onChange} />
+          <Form.Control type="text" name="name" maxLength="55" placeholder="Nome" value={values.name} onChange={onChange} />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" name="email" placeholder="Email" value={values.email} onChange={onChange}/>
+          <Form.Control type="email" name="email" maxLength="55" placeholder="Email" value={values.email} onChange={onChange}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Senha</Form.Label>
-          <Form.Control type="password" name="password" placeholder="Senha" value={values.password} onChange={onChange}/>
+          <Form.Control type="password" name="password" maxLength="55" placeholder="Senha" value={values.password} onChange={onChange}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Confirme sua senha</Form.Label>
-          <Form.Control type="password" name="passwordConfirmation" placeholder="Confirme sua senha" value={values.passwordConfirmation} onChange={onChange}/>
+          <Form.Control type="password" name="passwordConfirmation" maxLength="55" placeholder="Confirme sua senha" value={values.passwordConfirmation} onChange={onChange}/>
         </Form.Group>
         <Button className="login-button" variant="primary" onClick={() => HandleSubmitSingup()}>
           Salvar

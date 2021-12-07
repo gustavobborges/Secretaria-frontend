@@ -34,6 +34,17 @@ const FormPatient = () => {
   };
 
   const HandleSavePatient = async (event) => {
+
+    if (values.name === '') {
+      alert('Nome é obrigatório.');
+      return;
+    }
+
+    if (values.phone === '') {
+      alert('Telefone obrigatório.');
+      return;
+    }
+
     const formattedPhone = values.phone.replace(/\D/g,'');;
     const payload = {
       ...values,
@@ -99,9 +110,9 @@ const FormPatient = () => {
         </Form.Group>
 
         <Form.Group className="form-mask mb-3">
-          <Form.Label>Telefone</Form.Label>
+          <Form.Label>Celular</Form.Label>
           <InputMask  mask="(99) 9 9999-9999" value={values.phone} onChange={onChange}>
-            <Form.Control type="phone" name="phone" id="phone" value={values.phone} onChange={onChange} placeholder="Telefone" required />
+            <Form.Control type="phone" name="phone" id="phone" value={values.phone} onChange={onChange} placeholder="Celular" required />
           </InputMask>
         </Form.Group>
 
@@ -113,7 +124,7 @@ const FormPatient = () => {
         <Form.Group className="mb-3">
           <Form.Label>Amnese</Form.Label>
           <Form.Control maxLength="720" as="textArea" name="record" id="record" rows={3} value={values.record} onChange={onChange} placeholder="Amnese/descrição" required >
-          {values.record} 
+            {values.record} 
           </Form.Control>
         </Form.Group>
 
